@@ -7,9 +7,9 @@ class User(models.Model):
     nickname = models.CharField(max_length=32,unique=True,verbose_name='昵称')
     phonenum = models.CharField(max_length=16,unique=True,verbose_name='手机号')
     sex = models.CharField(max_length=8,choices=(('男','男'),('男','女')),verbose_name='性别')
-    birth_year = models.IntegerField(verbose_name='出生年份')
-    birth_month = models.IntegerField(verbose_name='出生月份')
-    birth_day = models.IntegerField(verbose_name='出生日期')
+    birth_year = models.IntegerField(default=2000,verbose_name='出生年份')
+    birth_month = models.IntegerField(default=1,verbose_name='出生月份')
+    birth_day = models.IntegerField(default=1,verbose_name='出生日期')
     avatar = models.CharField(max_length=256,verbose_name='头像url')
     location = models.CharField(max_length=32,verbose_name='常居地址')
 
