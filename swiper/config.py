@@ -3,7 +3,7 @@ from http.client import HTTPConnection
 from urllib.parse import urlencode
 
 
-
+#互亿短信配置
 host  = "106.ihuyi.com"
 sms_send_uri = "/webservice/sms.php?method=Submit"
 
@@ -17,7 +17,11 @@ headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/
 
 
 
-
-
+#七牛云配置
+QN_ACCESS_KEY = 'fVwMaBr009ELSWtzFXlWsjwwGw_DIP2EdaTuzmzW'
+QN_SECRET_KET = 'MSydyjXGlTBBVxGE8_Be2dCRq70FnGhOsiCLahw0'
+#要上传的空间
+QN_BUCKET_NAME = 'swiper'
+QN_BASE_URL = 'XXXXXXXXXX'
 
 

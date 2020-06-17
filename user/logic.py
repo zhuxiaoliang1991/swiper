@@ -2,8 +2,13 @@ import json
 import random
 import string
 from http.client import HTTPConnection
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urljoin
+
+import os
+from django.conf import settings
 from django.core.cache import cache
+
+from lib.qncloud import async_upload_to_qiniu
 from worker import call_by_worker
 
 from swiper import config
@@ -38,3 +43,20 @@ def check_vcode(phonenum,vcode):
     key = 'VerifyCode-%s'%phonenum
     saved_vcode = cache.get(key)
     return saved_vcode == vcode
+
+def save_upload_file(upload_file,request):
+    '''保存上传文件,并上传到七牛云'''
+    #获取文件并保存到本地
+    ext_name = upload_file.name.split('.')[-1]
+    filename = 'Avatar-%s.%s' % (request.session['uid'], ext_name)
+    filepath = os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, filename)
+    with open(filepath, 'wb') as newfile:
+        for chunk in upload_file.chunks():
+            newfile.write(chunk)
+    #异步将头像上传到七牛云
+    async_upload_to_qiniu(filepath,filename)
+    #保存url到数据库
+    url = urljoin(config.QN_BASE_URL,filename)
+    user = request.user
+    user.avatar = url
+    user.save()
