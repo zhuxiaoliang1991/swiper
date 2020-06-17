@@ -31,3 +31,10 @@ def send_sms(phonenum):
     response_str = json.loads(response.read())
     conn.close()
     return response_str
+
+
+def check_vcode(phonenum,vcode):
+    '''检查验证码是否正确'''
+    key = 'VerifyCode-%s'%phonenum
+    saved_vcode = cache.get(key)
+    return saved_vcode == vcode

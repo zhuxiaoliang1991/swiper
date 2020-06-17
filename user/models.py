@@ -2,6 +2,9 @@ from django.db import models
 import datetime
 
 # Create your models here.
+from lib.orm import ModelMixin
+
+
 class User(models.Model):
     '''用户数据模型'''
     nickname = models.CharField(max_length=32,unique=True,verbose_name='昵称')
@@ -31,7 +34,16 @@ class User(models.Model):
             self._profile,created = Profile.objects.get_or_create(id=self.id)
         return self._profile
 
-
+    def to_dict(self):
+        return {
+            'id':self.id,
+            'nickname':self.nickname,
+            'phonenum':self.phonenum,
+            'sex':self.sex,
+            'avatar':self.avatar,
+            'location':self.location,
+            'age':self.age
+        }
 
 
     class Meta:
@@ -40,7 +52,7 @@ class User(models.Model):
         verbose_name_plural = verbose_name
 
 
-class Profile(models.Model):
+class Profile(models.Model,ModelMixin):
     '''用户配置项'''
     location = models.CharField(max_length=32,verbose_name='目标城市')
     min_distance = models.IntegerField(default=1,verbose_name='最小距离')
@@ -53,6 +65,8 @@ class Profile(models.Model):
     vibration = models.BooleanField(default=True,verbose_name='开启震动')
     only_matche = models.BooleanField(default=True,verbose_name='禁止其他人看相册')
     auto_play = models.BooleanField(default=True,verbose_name='是否自动播放视频')
+
+
 
     class Meta:
         db_table = 'profile'
