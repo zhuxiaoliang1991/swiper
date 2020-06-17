@@ -1,7 +1,11 @@
+
+
 from django.core import cache
-from django.shortcuts import render
+
 
 # Create your views here.
+
+from lib.http import render_json
 from user.logic import send_sms
 
 '''
@@ -16,6 +20,7 @@ def get_verify_code(request):
     '''手机注册'''
     phonenum = request.GET.get('phonenum')
     send_sms(phonenum)
+    return render_json(None,0)
 
 def login(request):
     '''短信验证登录'''

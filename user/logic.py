@@ -28,6 +28,6 @@ def send_sms(phonenum):
     conn = HTTPConnection(config.host, port=80, timeout=30)
     conn.request("POST", config.sms_send_uri, params, config.headers)
     response = conn.getresponse()
-    response_str = json.dumps(response.read())
+    response_str = json.loads(response.read())
     conn.close()
     return response_str
