@@ -39,7 +39,8 @@ def login(request):
 
 def get_profile(request):
     '''获取个人资料'''
-    pass
+    user = request.user
+    return render_json(user.profile.to_dict(),0)
 
 def modify_profile(request):
     '''修改个人资料'''
