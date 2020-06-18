@@ -17,28 +17,28 @@ def get_users(request):
 
 def like(request):
     '''喜欢'''
-    sid = request.POST.get('sid')
+    sid = int(request.POST.get('sid'))
     is_match = logic.like(request.user,sid)
     return render_json({'is_match':is_match})
 
 def superlike(request):
     '''超级喜欢'''
-    sid = request.POST.get('sid')
+    sid = int(request.POST.get('sid'))
     is_match = logic.superlike(request.user, sid)
     return render_json({'is_match': is_match})
 def dislike(request):
     '''不喜欢'''
-    sid = request.POST.get('sid')
+    sid = int(request.POST.get('sid'))
     logic.dislike(request.user,sid)
     return render_json(None)
 def rewind(request):
     '''反悔'''
-    sid = request.POST.get('sid')
+    sid = int(request.POST.get('sid'))
     logic.rewind(request.user, sid)
     return render_json(None)
 
 def friends(request):
     '''好友列表'''
     my_friends = Friend.friends(request.user.id)
-    friends_info = {frd.to_dict() for frd in my_friends}
+    friends_info = [frd.to_dict() for frd in my_friends]
     return render_json({'friends':friends_info})
