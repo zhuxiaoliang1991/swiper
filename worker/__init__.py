@@ -12,5 +12,5 @@ celery_app.autodiscover_tasks()
 
 def call_by_worker(func):
     '''将任务在Celery中异步执行'''
-    task = celery_app.tasks(func)
+    task = celery_app.task(func)
     return task.delay

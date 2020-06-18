@@ -6,12 +6,13 @@ import random
 
 import django
 
+
 #设置环境(加载django程序环境)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0,BASE_DIR) #sys.path是python的相关模块
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','swiper.settings')
 django.setup()
-
+from vip.models import Permission,Vip,VipPremRelation
 from user.models import User
 last_names = '赵钱孙李周吴郑王冯陈褚卫蒋沈韩杨朱秦尤许何吕施张孔曹严华金魏陶姜戚谢邹' \
             '喻柏水窦章云苏潘葛奚范彭郎鲁韦昌马苗凤花方俞任袁柳酆鲍史唐费廉岑薛雷贺' \
@@ -102,16 +103,68 @@ def random_name():
 
 
 #创建初始用户
-for i in range(1000):
-    name,sex = random_name()
-    User.objects.create(
-        phonenum='%s'%random.randrange(21000000000,21900000000),
-        nickname = name,
-        sex = sex,
-        birth_year= random.randint(1980,2000),
-        birth_month = random.randint(1,12),
-        birth_day = random.randint(1,31),
-        location = random.choice(['北京','上海','天津','成都','西安','南昌','合肥','杭州','南京']),
+def create_robots(n):
+    for i in range(n):
+        name,sex = random_name()
+        User.objects.create(
+            phonenum='%s'%random.randrange(21000000000,21900000000),
+            nickname = name,
+            sex = sex,
+            birth_year= random.randint(1980,2000),
+            birth_month = random.randint(1,12),
+            birth_day = random.randint(1,31),
+            location = random.choice(['北京','上海','天津','成都','西安','南昌','合肥','杭州','南京']),
 
-    )
-    print('created:%s %s'%(name,sex))
+        )
+        print('created:%s %s'%(name,sex))
+
+
+def init_permission():
+    '''创建权限模型'''
+    permissions = [
+        'vipflag',#会员标识
+        'superlike',#超级喜欢
+        'rewind',#反悔功能
+        'anylocation',#任意更改定位
+        'unlimit_like',#无限喜欢次数
+    ]
+    for name in permissions:
+        Permission.objects.get_or_create(name=name)
+
+def init_vip():
+    for i in range(4):
+        Vip.objects.get_or_create(
+            name='会员-%d'%i,
+            level=i,
+            price=i*5.0
+        )
+
+def create_vip_perm_relations():
+    '''创建vip和permission的关系'''
+    vip1 = Vip.objects.get_or_create(level=1)[0]
+    vip2 = Vip.objects.get_or_create(level=2)[0]
+    vip3 = Vip.objects.get_or_create(level=3)[0]
+
+    vipflag = Permission.objects.get_or_create(name='vipflag')[0]
+    superlike = Permission.objects.get_or_create(name='superlike')[0]
+    rewind = Permission.objects.get_or_create(name='rewind')[0]
+    anylocation = Permission.objects.get_or_create(name='anylocation')[0]
+    unlimit_like = Permission.objects.get_or_create(name='unlimit_like')[0]
+
+    VipPremRelation.objects.get_or_create(vip_id=vip1.id,perm_id=vipflag.id)
+    VipPremRelation.objects.get_or_create(vip_id=vip1.id,perm_id=superlike.id)
+
+    VipPremRelation.objects.get_or_create(vip_id=vip2.id,perm_id=vipflag.id)
+    VipPremRelation.objects.get_or_create(vip_id=vip2.id,perm_id=rewind.id)
+
+    VipPremRelation.objects.get_or_create(vip_id=vip3.id,perm_id=vipflag.id)
+    VipPremRelation.objects.get_or_create(vip_id=vip3.id,perm_id=rewind.id)
+    VipPremRelation.objects.get_or_create(vip_id=vip3.id,perm_id=superlike.id)
+    VipPremRelation.objects.get_or_create(vip_id=vip3.id,perm_id=anylocation.id)
+    VipPremRelation.objects.get_or_create(vip_id=vip3.id,perm_id=unlimit_like.id)
+
+
+if __name__ == '__main__':
+    init_permission()
+    init_vip()
+    create_vip_perm_relations()

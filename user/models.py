@@ -15,6 +15,7 @@ class User(models.Model):
     birth_day = models.IntegerField(default=1,verbose_name='出生日期')
     avatar = models.CharField(max_length=256,verbose_name='头像url')
     location = models.CharField(max_length=32,verbose_name='常居地址')
+    vip_id = models.IntegerField(default=1)
 
     @property
     def age(self):
