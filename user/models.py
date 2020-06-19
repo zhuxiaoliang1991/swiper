@@ -3,6 +3,7 @@ import datetime
 
 # Create your models here.
 from lib.orm import ModelMixin
+from vip.models import Vip
 
 
 class User(models.Model):
@@ -34,6 +35,16 @@ class User(models.Model):
         if not hasattr(self,'_profile'):
             self._profile,created = Profile.objects.get_or_create(id=self.id)
         return self._profile
+
+    @property
+    def vip(self):
+        '''检查用户权限'''
+        if not hasattr(self,'_vip'):
+            self._vip = Vip.objects.get(id__in=self.vip_id)
+        return self._vip
+
+
+
 
     def to_dict(self):
         return {

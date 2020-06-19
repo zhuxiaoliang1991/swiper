@@ -4,6 +4,7 @@ from social import logic
 # Create your views here.
 from lib.http import render_json
 from social.models import Friend
+from vip.logic import perm_require
 
 
 def get_users(request):
@@ -21,6 +22,7 @@ def like(request):
     is_match = logic.like(request.user,sid)
     return render_json({'is_match':is_match})
 
+@perm_require('superlike')
 def superlike(request):
     '''超级喜欢'''
     sid = int(request.POST.get('sid'))
@@ -31,6 +33,8 @@ def dislike(request):
     sid = int(request.POST.get('sid'))
     logic.dislike(request.user,sid)
     return render_json(None)
+
+@perm_require('rewind')
 def rewind(request):
     '''反悔'''
     sid = int(request.POST.get('sid'))
