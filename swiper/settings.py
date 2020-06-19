@@ -107,6 +107,25 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+#django默认的缓存配置
+# CACHES = {
+#     'default':{
+#         'BACKEND':'django.core.cache.backends.locmem.LocMemCache'
+#     }
+# }
+
+#使用redis做缓存
+CACHES = {
+    'default':{
+        'BACKEND':'django_redis.cache.RedisCache',
+        'LOCATION':'redis://127.0.0.1:6379/4',
+        'OPTIONS':{
+            'CLIENT_CLASS':'django_redis.client.DefaultClient',
+            'PICKLE_VERSION':-1,
+        }
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
