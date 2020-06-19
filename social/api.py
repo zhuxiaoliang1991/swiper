@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from social import logic
+import logging
 
 # Create your views here.
 from lib.http import render_json
 from social.models import Friend
 from vip.logic import perm_require
 
+log = logging.getLogger('inf')
 
 def get_users(request):
     '''获取推荐列表'''
@@ -16,10 +18,12 @@ def get_users(request):
     result = [user.to_dict() for user in users]
     return render_json(result)
 
+
 def like(request):
     '''喜欢'''
     sid = int(request.POST.get('sid'))
     is_match = logic.like(request.user,sid)
+    log.info(f'{request.user.id} like {sid}')
     return render_json({'is_match':is_match})
 
 @perm_require('superlike')
@@ -27,11 +31,13 @@ def superlike(request):
     '''超级喜欢'''
     sid = int(request.POST.get('sid'))
     is_match = logic.superlike(request.user, sid)
+    log.info(f'{request.user.id} superlike {sid}')
     return render_json({'is_match': is_match})
 def dislike(request):
     '''不喜欢'''
     sid = int(request.POST.get('sid'))
     logic.dislike(request.user,sid)
+    log.info(f'{request.user.id} dislike {sid}')
     return render_json(None)
 
 @perm_require('rewind')

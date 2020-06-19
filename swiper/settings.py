@@ -130,4 +130,57 @@ MEDIA_ROOT = 'medias'
 
 
 #日志
-
+LOGGING={
+    'version':1,
+    'disable_existing_loggers':True,
+    #格式配置
+    'formatters':{
+        'simple':{
+            'format':'%(asctime)s %(module)s.%(funcName)s: %(message)s',
+            'datefmt':'%Y-%m-%d %H:%M:%S',
+        },
+        'verbose':{
+            'format':('%(asctime)s %(levelname)s [%(process)d-%(threadName)s]%(module)s.%(funcName)s line %(linena)d: %(message)s'),
+            'datefmt':'%Y-%m-%d %H:%M:%S',
+        }
+    },
+    #Handler配置
+    'handlers':{
+        'console':{
+            'class':'logging.StreamHandler',
+            'level':'DEBUG' if DEBUG else 'WARNING'
+        },
+        'info':{
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'filename':f'{BASE_DIR}/logs/info.log',#日志保存路径
+            'when':'D',#每天切割日志
+            'backupCount':30, #日志保留30天
+            'formatter':'simple',
+            'level':'INFO',
+        },
+        'error':{
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'filename':f'{BASE_DIR}/logs/error.log',#日志保存路径
+            'when':'W0',#每周一 切割日志
+            'backupCount':4, #日志保留4周
+            'formatter':'verbose',
+            'level':'WARNING',
+        }
+    },
+    #logger配置
+    'loggers':{
+        'django':{
+            'handlers':['console'],
+        },
+        'inf':{
+            'handlers':['info'],
+            'prepagate':True,
+            'level':'INFO',
+        },
+        'err':{
+            'handlers':['error'],
+            'propagate':True,
+            'level':'WARNING',
+        }
+    }
+}
