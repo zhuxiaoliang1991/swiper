@@ -82,9 +82,19 @@ WSGI_APPLICATION = 'swiper.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR,'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'worker/../db.sqlite3'),
 
-    }
+    },
+    'db1': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'worker/../db1.sqlite3'),
+
+    },
+    'db2': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'worker/../db2.sqlite3'),
+
+    },
 }
 
 
@@ -147,6 +157,14 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = 'medias'
 
+
+#Email配置
+ADMINS = [
+    ('John','john@example.com'),
+    ('Mary','mary@example.com')
+
+]
+EMAIL_SUBJECT_PREFIX = '[Swiper]'   #邮件主题前缀配置
 
 #日志
 LOGGING={
