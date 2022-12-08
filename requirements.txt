@@ -3,7 +3,7 @@ asgiref==3.2.10
 backcall==0.2.0
 billiard==3.6.3.0
 celery==4.4.5
-certifi==2020.4.5.2
+certifi==2022.12.7
 chardet==3.0.4
 decorator==4.4.2
 Django==1.11.15
